@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
+        classpath("org.hibernate.build.gradle:gradle-maven-publish-auth:2.0.1")
     }
 }
 
@@ -13,6 +14,9 @@ plugins {
     id 'org.ajoberstar.grgit'           version '1.7.2'
     id 'org.ajoberstar.github-pages'    version '1.7.2'
 }
+
+apply plugin: 'maven-publish'
+apply plugin: 'maven-publish-auth'
 
 allprojects {
     apply plugin: 'java'
@@ -94,3 +98,25 @@ build.dependsOn subprojects.build
 
 task buildCI(dependsOn: [build, testReport, javadocAll, asciidoctor])
 task jenkinsBuild(dependsOn: buildCI)
+
+task printVersion {
+    println project.version
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from project.components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name 'nexus'
+            url 'http://maven.gem.internal:8081/repository/maven-snapshots'
+            // TODO: automate this
+            // replace the snapshot url with the one below to do a release
+            // url 'http://maven.gem.internal:8081/repository/maven-releases'
+        }
+    }
+}
