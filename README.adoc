@@ -1,3 +1,4 @@
+* **WE ARE NOT CURRENTLY USING IT**
 = ConensusJ (formerly bitcoinj-addons) 
 Sean Gilligan <https://github.com/msgilligan>
 v0.2.6
